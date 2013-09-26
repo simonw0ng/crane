@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Mapper">
+	<sql id="begin">
+		<choose>
+			<when test="_databaseId == 'Oracle'">
+				WITH LIST AS (
+			</when>
+			<when test="_databaseId == 'Microsoft SQL Server'">
+				WITH LIST AS (
+			</when>
+			<when test="_databaseId == 'MySQL'">
+			</when>
+			<otherwise>数据库方言不能识别begin！</otherwise>
+		</choose>
+	</sql>
+	<sql id="end">
+		<choose>
+			<when test="_databaseId == 'Oracle'">
+				) SELECT * FROM (SELECT ROWNUM AS INX, T_.* FROM LIST
+				T_) WHERE INX BETWEEN #{first} AND #{end}
+			</when>
+			<when test="_databaseId == 'Microsoft SQL Server'">
+				) SELECT * FROM (SELECT ROW_NUMBER() OVER (ORDER BY
+				TMPNO) AS INX,* FROM LIST) T_ WHERE T_.INX >= #{first}
+			</when>
+			<when test="_databaseId == 'MySQL'">
+				LIMIT #{first} , #{pageSize}
+			</when>
+			<otherwise>数据库方言不能识别end！</otherwise>
+		</choose>
+	</sql>
+	<sql id="top">
+		<choose>
+			<when test="_databaseId == 'Oracle'">
+			</when>
+			<when test="_databaseId == 'Microsoft SQL Server'">
+				TOP (#{end}) TMPNO = 0,
+			</when>
+			<when test="_databaseId == 'MySQL'">
+			</when>
+			<otherwise>数据库方言不能识别top！</otherwise>
+		</choose>
+	</sql>
+</mapper>
