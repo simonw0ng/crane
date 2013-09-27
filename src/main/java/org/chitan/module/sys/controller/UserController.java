@@ -5,56 +5,51 @@ import org.chitan.module.sys.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * LoginController¸ºÔğ´ò¿ªµÇÂ¼Ò³Ãæ(GETÇëÇó)ºÍµÇÂ¼³ö´íÒ³Ãæ(POSTÇëÇó)£¬
- * 
- * ÕæÕıµÇÂ¼µÄPOSTÇëÇóÓÉFilterÍê³É,
- * 
+ * LoginControllerè´Ÿè´£æ‰“å¼€ç™»å½•é¡µé¢(GETè¯·æ±‚)å’Œç™»å½•å‡ºé”™é¡µé¢(POSTè¯·æ±‚)ï¼Œ
+ * <p/>
+ * çœŸæ­£ç™»å½•çš„POSTè¯·æ±‚ç”±Filterå®Œæˆ,
+ *
  * @author CHENLEI
  */
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
 
-	@Autowired
-	private UserManager userManager;
+    @Autowired
+    private UserManager userManager;
 
-	@RequestMapping(value = "getUserCount", method = RequestMethod.GET)
-	public String getUserCount(Model model) {
-		int count = userManager.count();
-		model.addAttribute("count", count);
-		return "user/index";
-	}
+    @RequestMapping(value = "getUserCount", method = RequestMethod.GET)
+    public String getUserCount(Model model) {
+        int count = userManager.count();
+        model.addAttribute("count", count);
+        return "user/index";
+    }
 
-	@RequestMapping(value = "getUserBy/{id}", method = RequestMethod.GET)
-	public String getUserBy(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("user", userManager.selectOne(id));
-		return "user/user";
-	}
+    @RequestMapping(value = "getUserBy/{id}", method = RequestMethod.GET)
+    public String getUserBy(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userManager.selectOne(id));
+        return "user/user";
+    }
 
-	@RequestMapping(value = "selectUserById/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public User selectUserById(@PathVariable("id") Long id, Model model) {
-		return userManager.selectOne(id);
-	}
+    @RequestMapping(value = "selectUserById/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public User selectUserById(@PathVariable("id") Long id, Model model) {
+        return userManager.selectOne(id);
+    }
 
-	/**
-	 * ËùÓĞRequestMapping·½·¨µ÷ÓÃÇ°µÄModel×¼±¸·½·¨, ÊµÏÖStruts2
-	 * Preparable¶ş´Î²¿·Ö°ó¶¨µÄĞ§¹û,ÏÈ¸ù¾İformµÄid´ÓÊı¾İ¿â²é³öUser¶ÔÏó,ÔÙ°ÑFormÌá½»µÄÄÚÈİ°ó¶¨µ½¸Ã¶ÔÏóÉÏ¡£
-	 * ÒòÎª½öupdate()·½·¨µÄformÖĞÓĞidÊôĞÔ£¬Òò´Ë½öÔÚupdateÊ±Êµ¼ÊÖ´ĞĞ.
-	 */
-	@ModelAttribute
-	public void getUser(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
-		if (id != -1) {
-			model.addAttribute("user", userManager.selectOne(id));
-		}
-	}
+    /**
+     * æ‰€æœ‰RequestMappingæ–¹æ³•è°ƒç”¨å‰çš„Modelå‡†å¤‡æ–¹æ³•, å®ç°Struts2
+     * PreparableäºŒæ¬¡éƒ¨åˆ†ç»‘å®šçš„æ•ˆæœ,å…ˆæ ¹æ®formçš„idä»æ•°æ®åº“æŸ¥å‡ºUserå¯¹è±¡,å†æŠŠFormæäº¤çš„å†…å®¹ç»‘å®šåˆ°è¯¥å¯¹è±¡ä¸Šã€‚
+     * å› ä¸ºä»…update()æ–¹æ³•çš„formä¸­æœ‰idå±æ€§ï¼Œå› æ­¤ä»…åœ¨updateæ—¶å®é™…æ‰§è¡Œ.
+     */
+    @ModelAttribute
+    public void getUser(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+        if (id != -1) {
+            model.addAttribute("user", userManager.selectOne(id));
+        }
+    }
 
 }
